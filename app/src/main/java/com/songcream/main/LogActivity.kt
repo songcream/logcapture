@@ -57,7 +57,7 @@ class LogActivity : FragmentActivity() {
         floatingButton_connect.setOnClickListener({
             if(iCommucateService==null){
                 val intent=Intent()
-                intent.component = ComponentName("com.songcream.server", "com.songcream.logcapture.CommucateService")
+                intent.component = ComponentName("com.huawei.honorclub.android", "com.songcream.logcapture.CommucateService")
                 bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE)
             }else{
                 Toast.makeText(this,"服务已经连接上",Toast.LENGTH_SHORT).show()
@@ -75,7 +75,7 @@ class LogActivity : FragmentActivity() {
         tabLayout.getTabAt(1)?.setText("local")
 
         val intent=Intent()
-        intent.component = ComponentName("com.songcream.server", "com.songcream.logcapture.CommucateService")
+        intent.component = ComponentName("com.huawei.honorclub.android", "com.songcream.logcapture.CommucateService")
         bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE)
     }
 

@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         buttonSend=findViewById(R.id.button);
         editTextContent=findViewById(R.id.editText);
         Intent intent=new Intent();
-        intent.setComponent(new ComponentName("com.songcream.server", "com.songcream.logcapture.CommucateService"));
+        intent.setComponent(new ComponentName("com.huawei.honorclub.android", "com.songcream.logcapture.CommucateService"));
 //        startService(intent);
         bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE);
 
