@@ -42,5 +42,5 @@ Step 4. Manifest.xml中加入service的声明
 	
 Step 5. 自己编译工程里的app包或者下载apk，打开apk然后点击螺丝刀图标提示服务连接成功就可以愉快的网络抓包了
 （如果遇到连不上的情况，可以尝试在手机系统里允许你自己的程序后台运行）
-
+ ![image](https://github.com/songcream/logcapture/blob/master/pic.jpg)
   
