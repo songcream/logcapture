@@ -31,20 +31,23 @@ class LogActivity : FragmentActivity() ,View.OnClickListener{
     var networkFragment:NetworkFragment?=null;
     var localLogFragment:LocalLogFragment?=null;
     var iCommucateService:ICommucateService?=null;
-    var iLogListener:ILogListener.Stub?=null;
+    var iLocalLogListener:ILogListener.Stub?=null;
+    var iNetLogListener:ILogListener.Stub?=null;
     var appDialog:AppDialog?=null;
     var filterDialog:FilterDialog?=null;
     var connectPackage:String?=null;
     var serviceConnection=object :ServiceConnection{
         override fun onServiceDisconnected(name: ComponentName?) {
-            iCommucateService?.unRegisterReceiver(iLogListener)
+            iCommucateService?.unRegisterLocalReceiver(iLocalLogListener)
+            iCommucateService?.unRegisterNetReceiver(iNetLogListener)
             iCommucateService=null
             Toast.makeText(this@LogActivity,"服务已断开",Toast.LENGTH_SHORT).show()
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             iCommucateService=ICommucateService.Stub.asInterface(service)
-            iCommucateService?.registerReceiver(iLogListener)
+            iCommucateService?.registerLocalReceiver(iLocalLogListener)
+            iCommucateService?.registerNetReceiver(iNetLogListener)
             Toast.makeText(this@LogActivity,"服务已经连接上",Toast.LENGTH_SHORT).show()
         }
     }
@@ -86,20 +89,21 @@ class LogActivity : FragmentActivity() ,View.OnClickListener{
             true
         })
         floatingButton_connect.setOnClickListener(this)
-        iLogListener=object :ILogListener.Stub(){
+        iLocalLogListener=object :ILogListener.Stub(){
             override fun message(logBean: LogBean?) {
                 if(logBean==null) return;
-                Log.e("log",logBean?.code.toString());
-                if(TextUtils.isEmpty(logBean?.localLog)) {
-                    networkFragment?.data?.add(logBean!!)
-                    runOnUiThread({
-                        networkFragment?.adapter?.notifyDataSetChanged()
-                    })
-                }else{
-                    runOnUiThread({
-                        localLogFragment!!.addData(logBean!!)
-                    })
-                }
+                runOnUiThread({
+                    localLogFragment!!.addData(logBean!!)
+                })
+            }
+        }
+        iNetLogListener=object :ILogListener.Stub(){
+            override fun message(logBean: LogBean?) {
+                if(logBean==null) return;
+                networkFragment?.data?.add(logBean!!)
+                runOnUiThread({
+                    networkFragment?.adapter?.notifyDataSetChanged()
+                })
             }
         }
         viewPager.adapter=LogPagerAdapter(supportFragmentManager);
@@ -129,6 +133,10 @@ class LogActivity : FragmentActivity() ,View.OnClickListener{
                     connectPackage=AppDialog.getSaveAppinfo(this).packageName
                     if(TextUtils.isEmpty(connectPackage)){
                         Toast.makeText(this,"请先设置您要连接的应用",Toast.LENGTH_SHORT).show()
+                        if(appDialog==null) {
+                            appDialog = AppDialog(this@LogActivity)
+                        }
+                        appDialog!!.show()
                         return
                     }
                     intent.component = ComponentName(connectPackage, "com.songcream.logcapture.CommucateService")
@@ -159,21 +167,24 @@ class LogActivity : FragmentActivity() ,View.OnClickListener{
     }
 
     private fun unBindService(reBindService:Boolean){
-        iCommucateService?.unRegisterReceiver(iLogListener)
+        iCommucateService?.unRegisterLocalReceiver(iLocalLogListener)
+        iCommucateService?.unRegisterNetReceiver(iNetLogListener)
         iCommucateService=null
         Toast.makeText(this@LogActivity,"原服务已断开",Toast.LENGTH_SHORT).show()
 
         if(reBindService) {
             serviceConnection=object :ServiceConnection{
                 override fun onServiceDisconnected(name: ComponentName?) {
-                    iCommucateService?.unRegisterReceiver(iLogListener)
+                    iCommucateService?.unRegisterLocalReceiver(iLocalLogListener)
+                    iCommucateService?.unRegisterNetReceiver(iNetLogListener)
                     iCommucateService=null
                     Toast.makeText(this@LogActivity,"服务已断开",Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                     iCommucateService=ICommucateService.Stub.asInterface(service)
-                    iCommucateService?.registerReceiver(iLogListener)
+                    iCommucateService?.registerLocalReceiver(iLocalLogListener)
+                    iCommucateService?.registerNetReceiver(iNetLogListener)
                     Toast.makeText(this@LogActivity,"服务已经连接上",Toast.LENGTH_SHORT).show()
                 }
             }

@@ -31,6 +31,14 @@ class NetLogIntercepter:Interceptor{
             logBean.url=oldRequest.url().encodedPath()
             logBean.response=stringToJSON(responseString)
             logBean.code=response.code()
+
+            val map=HashMap<String,String?>();
+            val headers=oldRequest.headers()
+            headers.names().forEach({
+                map.put(it,headers[it])
+            })
+            logBean.headsMap=map
+
             CommucateService.notifyLog(logBean)
 
             val responseBody = ResponseBody.create(mediaType, responseString)

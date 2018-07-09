@@ -5,25 +5,41 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.text.TextUtils;
 
 /**
  * Created by gengsong on 2018/6/29.
  */
 
 public class CommucateService extends Service {
-    private static RemoteCallbackList<ILogListener> callbackList=new RemoteCallbackList<>();
+    private static RemoteCallbackList<ILogListener> localLogCallbacks=new RemoteCallbackList<>();
+    private static RemoteCallbackList<ILogListener> netLogCallbacks=new RemoteCallbackList<>();
     private ICommucateService.Stub iCommucateService=new ICommucateService.Stub() {
         @Override
-        public void registerReceiver(ILogListener listener) throws RemoteException {
-            if(listener!=null) {
-                callbackList.register(listener);
+        public void registerLocalReceiver(ILogListener listener) throws RemoteException {
+            if(listener!=null){
+                localLogCallbacks.register(listener);
             }
         }
 
         @Override
-        public void unRegisterReceiver(ILogListener listener) throws RemoteException {
+        public void unRegisterLocalReceiver(ILogListener listener) throws RemoteException {
             if(listener!=null){
-                callbackList.unregister(listener);
+                localLogCallbacks.unregister(listener);
+            }
+        }
+
+        @Override
+        public void registerNetReceiver(ILogListener listener) throws RemoteException {
+            if(listener!=null){
+                netLogCallbacks.register(listener);
+            }
+        }
+
+        @Override
+        public void unRegisterNetReceiver(ILogListener listener) throws RemoteException {
+            if(listener!=null){
+                netLogCallbacks.unregister(listener);
             }
         }
     };
@@ -55,18 +71,26 @@ public class CommucateService extends Service {
 
     public static void notifyLog(LogBean logBean){
         int count = 0;
-        count = callbackList.beginBroadcast();
+        RemoteCallbackList<ILogListener> remoteCallbackList;
+        if(!TextUtils.isEmpty(logBean.getLocalLog())){
+            remoteCallbackList=localLogCallbacks;
+        }else if(!TextUtils.isEmpty(logBean.getUrl())){
+            remoteCallbackList=netLogCallbacks;
+        }else{
+            return;
+        }
+        count = remoteCallbackList.beginBroadcast();
         if (count == 0) {
-            callbackList.finishBroadcast();
+            remoteCallbackList.finishBroadcast();
             return;
         }
         try {
             for (int i = 0; i < count; i++) {
-                callbackList.getBroadcastItem(i).message(logBean);
+                remoteCallbackList.getBroadcastItem(i).message(logBean);
             }
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        callbackList.finishBroadcast();
+        remoteCallbackList.finishBroadcast();
     }
 }

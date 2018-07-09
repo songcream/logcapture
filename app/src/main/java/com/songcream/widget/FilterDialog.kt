@@ -50,7 +50,7 @@ abstract class FilterDialog(context: Context)  {
                 saveConfig(filterConfig)
                 val newLogLevel=filterConfig.filterLevel
                 val newFindString=filterConfig.findString!!
-                if(logLevel != newLogLevel && !findString.equals(newFindString)){
+                if(logLevel != newLogLevel || !findString.equals(newFindString)){
                     logLevel=newLogLevel
                     findString=newFindString
                     onConfirm(logLevel, findString)

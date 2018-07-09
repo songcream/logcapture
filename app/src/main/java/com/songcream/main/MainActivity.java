@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 if(iCommucateService!=null){
                     try {
-                        iCommucateService.registerReceiver(iLogListener);
+                        iCommucateService.registerNetReceiver(iLogListener);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

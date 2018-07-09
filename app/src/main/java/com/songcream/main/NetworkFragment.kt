@@ -51,7 +51,7 @@ class NetworkFragment : Fragment() {
                 startActivity(intent)
             })
             val code =data.get(position).code
-            if(200<code && code<300){
+            if(200<=code && code<300){
                 holder?.urlText?.setTextColor(Color.parseColor("#2980b9"))
             }else{
                 holder?.urlText?.setTextColor(Color.RED)
