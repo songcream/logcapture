@@ -14,6 +14,8 @@ public class LogBean implements Parcelable{
     private String url;
     private String body;
     private String response;
+    private int code;
+    private String localLog;
 
     public LogBean(){}
 
@@ -23,6 +25,8 @@ public class LogBean implements Parcelable{
         url = in.readString();
         body = in.readString();
         response = in.readString();
+        code=in.readInt();
+        localLog=in.readString();
     }
 
     public static final Creator<LogBean> CREATOR = new Creator<LogBean>() {
@@ -89,6 +93,23 @@ public class LogBean implements Parcelable{
         dest.writeString(url);
         dest.writeString(body);
         dest.writeString(response);
+        dest.writeInt(code);
+        dest.writeString(localLog);
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getLocalLog() {
+        return localLog;
+    }
+
+    public void setLocalLog(String localLog) {
+        this.localLog = localLog;
+    }
 }

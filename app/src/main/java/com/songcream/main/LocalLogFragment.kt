@@ -7,21 +7,26 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.songcream.aidl.R
+import com.songcream.logcapture.LocalLogUtil
 import com.songcream.logcapture.LogBean
 
 /**
  * Created by gengsong on 2018/7/1.
  */
-class NetworkFragment : Fragment() {
+class LocalLogFragment : Fragment() {
     var recyclerView:RecyclerView?=null
-    val adapter=NetworkAdapter()
+    val adapter=LocalLogAdapter()
     val data=ArrayList<LogBean>()
+    var filterData=ArrayList<LogBean>()
+    var logLevel=0;
+    var findString:String?=null;
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=LayoutInflater.from(context).inflate(R.layout.network_fragment,null)
@@ -31,7 +36,32 @@ class NetworkFragment : Fragment() {
         return view
     }
 
-    inner class NetworkAdapter:RecyclerView.Adapter<UrlViewHolder>(){
+    fun setFilter(logLevel:Int,findString:String){
+        this.logLevel=logLevel
+        this.findString=findString
+        filterData=LocalLogUtil.filterLocalLog(data,findString,logLevel)
+        adapter.notifyDataSetChanged();
+    }
+
+    fun addData(logBean: LogBean){
+        data.add(logBean)
+        if(LocalLogUtil.isInLevel(logLevel,logBean.localLog)){
+            if(!TextUtils.isEmpty(findString)){
+                if(logBean.localLog.contains(findString!!))
+                    filterData.add(logBean)
+            }else{
+                filterData.add(logBean)
+            }
+        }
+    }
+
+    fun clear(){
+        data.clear()
+        filterData.clear()
+        adapter.notifyDataSetChanged();
+    }
+
+    inner class LocalLogAdapter:RecyclerView.Adapter<UrlViewHolder>(){
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UrlViewHolder {
             val view=LayoutInflater.from(parent?.context).inflate(R.layout.itemview_network,null)
@@ -39,16 +69,11 @@ class NetworkFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return data.size
+            return filterData.size
         }
 
         override fun onBindViewHolder(holder: UrlViewHolder?, position: Int) {
-            holder?.urlText?.setText(data.get(position).url)
-            holder?.urlText?.setOnClickListener({
-                val intent=Intent(context,NetLogDetailActivity::class.java)
-                intent.putExtra("logBean",data.get(position))
-                startActivity(intent)
-            })
+            holder?.urlText?.setText(filterData.get(position).localLog)
         }
     }
 

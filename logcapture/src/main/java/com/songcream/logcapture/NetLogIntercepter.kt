@@ -1,5 +1,6 @@
 package com.songcream.logcapture
 
+import android.util.Log
 import com.songcream.logcapture.LogBean
 import okhttp3.*
 import okio.Buffer
@@ -29,6 +30,7 @@ class NetLogIntercepter:Interceptor{
             logBean.body=formatJsonString(paramsStr)
             logBean.url=oldRequest.url().encodedPath()
             logBean.response=formatJsonString(responseString)
+            logBean.code=response.code()
             CommucateService.notifyLog(logBean)
 
             val responseBody = ResponseBody.create(mediaType, responseString)

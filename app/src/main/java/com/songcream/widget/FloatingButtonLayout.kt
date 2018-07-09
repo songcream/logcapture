@@ -38,7 +38,6 @@ class FloatingButtonLayout : RelativeLayout{
                 val animator=ValueAnimator.ofFloat(0f,-buttonMargin*(childCount-1-i)*1f)
                 animator.addUpdateListener {
                     floatingActionButton.translationY=it.animatedValue as Float
-                    Log.e("translationY",""+floatingActionButton.translationY)
                 };
                 animator.setDuration(300)
                 animationList.add(animator)

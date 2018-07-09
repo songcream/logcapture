@@ -57,6 +57,7 @@ public class CommucateService extends Service {
         int count = 0;
         count = callbackList.beginBroadcast();
         if (count == 0) {
+            callbackList.finishBroadcast();
             return;
         }
         try {
@@ -65,8 +66,7 @@ public class CommucateService extends Service {
             }
         } catch (RemoteException e) {
             e.printStackTrace();
-        } finally {
-            callbackList.finishBroadcast();
         }
+        callbackList.finishBroadcast();
     }
 }
