@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textSize="13sp"
+                android:textIsSelectable="true"
                 android:text=""/>
 
         </LinearLayout>
@@ -67,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textSize="13sp"
+                android:textIsSelectable="true"
                 android:text=""/>
 
         </LinearLayout>
@@ -89,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textSize="13sp"
+                android:textIsSelectable="true"
                 android:text=""/>
 
         </LinearLayout>
@@ -111,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textSize="13sp"
+                android:textIsSelectable="true"
                 android:text=""/>
 
         </LinearLayout>

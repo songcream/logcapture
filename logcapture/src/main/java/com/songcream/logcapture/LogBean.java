@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 /**
  * Created by gengsong on 2018/6/29.
@@ -16,6 +17,7 @@ public class LogBean implements Parcelable{
     private String response;
     private int code;
     private String localLog;
+    private HashMap<String,String> headsMap;
 
     public LogBean(){}
 
@@ -27,6 +29,7 @@ public class LogBean implements Parcelable{
         response = in.readString();
         code=in.readInt();
         localLog=in.readString();
+        headsMap=in.readHashMap(HashMap.class.getClassLoader());
     }
 
     public static final Creator<LogBean> CREATOR = new Creator<LogBean>() {
@@ -82,21 +85,6 @@ public class LogBean implements Parcelable{
         this.response = response;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(time);
-        dest.writeString(url);
-        dest.writeString(body);
-        dest.writeString(response);
-        dest.writeInt(code);
-        dest.writeString(localLog);
-    }
-
     public int getCode() {
         return code;
     }
@@ -111,5 +99,29 @@ public class LogBean implements Parcelable{
 
     public void setLocalLog(String localLog) {
         this.localLog = localLog;
+    }
+
+    public HashMap<String, String> getHeadsMap() {
+        return headsMap;
+    }
+
+    public void setHeadsMap(HashMap<String, String> headsMap) {
+        this.headsMap = headsMap;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(time);
+        dest.writeString(url);
+        dest.writeString(body);
+        dest.writeString(response);
+        dest.writeInt(code);
+        dest.writeString(localLog);
+        dest.writeMap(headsMap);
     }
 }

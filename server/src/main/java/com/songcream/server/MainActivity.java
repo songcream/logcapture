@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 /**
  * Created by gengsong on 2018/6/28.
@@ -36,22 +37,24 @@ public class MainActivity extends Activity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                LogBean logBean=new LogBean();
-//                logBean.setTime(System.currentTimeMillis());
-//                CommucateService.notifyLog(logBean);
+                LogBean logBean=new LogBean();
+                logBean.setLocalLog("local log");
+                logBean.setUrl("url");
+                logBean.setCode(200);
+                HashMap<String,String> map=new HashMap<String, String>();
+                map.put("jwt","this is jwt");
+                logBean.setHeadsMap(map);
+                logBean.setTime(System.currentTimeMillis());
+                CommucateService.notifyLog(logBean);
 
-                String baseCommand = "logcat -v time";
-                baseCommand += " MyApp:I "; // Info for my app
-                baseCommand += " *:S "; // Silence others
-
-                try {
-                    Process exec = Runtime.getRuntime().exec("logcat -v time *:S | grep \"Hw\"");
-                    InputStream inputStream=exec.getInputStream();
-                    LocalLogThread localLogThread=new LocalLogThread(inputStream);
-                    localLogThread.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Process exec = Runtime.getRuntime().exec("logcat -v time *:E");
+//                    InputStream inputStream=exec.getInputStream();
+//                    LocalLogThread localLogThread=new LocalLogThread(inputStream);
+//                    localLogThread.start();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }

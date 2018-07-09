@@ -53,6 +53,7 @@ class LocalLogFragment : Fragment() {
                 filterData.add(logBean)
             }
         }
+        adapter.notifyDataSetChanged()
     }
 
     fun clear(){

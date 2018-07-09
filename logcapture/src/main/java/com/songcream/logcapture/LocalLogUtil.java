@@ -27,9 +27,9 @@ public class LocalLogUtil {
     public static final String Log_W=" *:Warn";
     public static final String Log_V=" *:Verbose";
 //    private static final String logPath= Environment.getExternalStorageDirectory().getAbsolutePath()+"/logClub.txt";
-    private LocalLogThread localLogThread;
+    private static LocalLogThread localLogThread;
 
-    public void startLog(){
+    public static void startLog(){
 //        File file=new File(logPath);
 //        if(file.exists()){
 //            file.delete();
@@ -47,13 +47,14 @@ public class LocalLogUtil {
         }
     }
 
-    public void stopLog(){
+    public static void stopLog(){
         if(localLogThread!=null){
             localLogThread.stopLog();
+            localLogThread=null;
         }
     }
 
-    private class LocalLogThread extends Thread {
+    private static class LocalLogThread extends Thread {
         private File file;
         private InputStream inputStream;
         private boolean stop=false;

@@ -1,6 +1,7 @@
 package com.songcream.main
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -49,6 +50,12 @@ class NetworkFragment : Fragment() {
                 intent.putExtra("logBean",data.get(position))
                 startActivity(intent)
             })
+            val code =data.get(position).code
+            if(200<code && code<300){
+                holder?.urlText?.setTextColor(Color.parseColor("#2980b9"))
+            }else{
+                holder?.urlText?.setTextColor(Color.RED)
+            }
         }
     }
 
