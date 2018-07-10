@@ -9,9 +9,20 @@ Step 1. 在项目的gradle中加入
 	}
 Step 2. 在需要使用抓包的module中加入
 
-	dependencies {
-	        debugImplementation 'com.github.songcream:logcapture:v1.0.3'
-	}
+	gradle:
+		dependencies {
+			debugImplementation 'com.github.songcream:logcapture:v1.0.3'
+		}
+	
+	Manifest.xml中加入service的声明
+
+		<service android:name="com.songcream.logcapture.CommucateService"
+		    android:exported="true">
+		    <intent-filter>
+			<action android:name="com.songcream.logcapture.CommucateService" />
+		    </intent-filter>
+		</service>
+	
   
 Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，以下分为两个小步，分别集成网络抓包和本地logcat抓包，根据自己的需要集成
 
@@ -34,15 +45,6 @@ Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，�
 	if(BuildConfig.DEBUG) {
                 addLogCaptureInterceptor(builder);
         }
-	
-  Manifest.xml中加入service的声明
-
-	<service android:name="com.songcream.logcapture.CommucateService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.songcream.logcapture.CommucateService" />
-            </intent-filter>
-        </service>
 	
 2、集成本地logcat抓包
 
@@ -69,6 +71,11 @@ Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，�
 			e.printStackTrace();
 		    }
 		}
+		
+   在Manifest.xml中加入读取log权限
+   
+   	<uses-permission android:name="android.permission.READ_LOGS"/>
+	
 
 Step 4. 自己编译工程里的app包或者下载工程根目录下的apk安装，打开apk然后长按螺丝刀图标可以配置要连接的应用，然后点击螺丝刀图标提示服务连接成功就可以愉快的抓包了
 （如果遇到连不上的情况，可以尝试在手机系统里允许你自己的程序后台运行）
