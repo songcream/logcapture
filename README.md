@@ -10,7 +10,7 @@ Step 1. 在项目的gradle中加入
 Step 2. 在需要使用抓包的module中加入
 
 	dependencies {
-	        debugImplementation 'com.github.songcream:logcapture:v1.0.1'
+	        debugImplementation 'com.github.songcream:logcapture:v1.0.3'
 	}
   
 Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，以下分为两个小步，分别集成网络抓包和本地logcat抓包，根据自己的需要集成
@@ -48,31 +48,32 @@ Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，�
 
   在MainActivity中添加如下代码即可：
   
-  onCreate():
-  	if(BuildConfig.DEBUG){
-	    try {
-		Class<?> localLogClass = Class.forName("com.songcream.logcapture.LocalLogUtil");
-		Method initialize = localLogClass.getMethod("startLog");
-		initialize.invoke(null);
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-        }
-	
-  onDestroy():
-  	if(BuildConfig.DEBUG){
-            try {
-                Class<?> localLogClass = Class.forName("com.songcream.logcapture.LocalLogUtil");
-                Method initialize = localLogClass.getMethod("stopLog");
-                initialize.invoke(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+	  onCreate():
+		if(BuildConfig.DEBUG){
+		    try {
+			Class<?> localLogClass = Class.forName("com.songcream.logcapture.LocalLogUtil");
+			Method initialize = localLogClass.getMethod("startLog");
+			initialize.invoke(null);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+
+	  onDestroy():
+		if(BuildConfig.DEBUG){
+		    try {
+			Class<?> localLogClass = Class.forName("com.songcream.logcapture.LocalLogUtil");
+			Method initialize = localLogClass.getMethod("stopLog");
+			initialize.invoke(null);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
 
 Step 4. 自己编译工程里的app包或者下载工程根目录下的apk安装，打开apk然后长按螺丝刀图标可以配置要连接的应用，然后点击螺丝刀图标提示服务连接成功就可以愉快的抓包了
 （如果遇到连不上的情况，可以尝试在手机系统里允许你自己的程序后台运行）
 
- ![image](https://github.com/songcream/logcapture/blob/master/pic.jpg)
- 
  ![image](https://github.com/songcream/logcapture/blob/master/pic1.jpg)
+ 
+ ![image](https://github.com/songcream/logcapture/blob/master/pic.jpg)
+
