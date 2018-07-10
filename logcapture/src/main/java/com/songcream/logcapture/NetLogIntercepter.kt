@@ -39,7 +39,7 @@ class NetLogIntercepter:Interceptor{
             })
             logBean.headsMap=map
 
-            CommucateService.notifyLog(logBean)
+            CommucateService.notifyNetLog(logBean)
 
             val responseBody = ResponseBody.create(mediaType, responseString)
             return response.newBuilder().body(responseBody).build()

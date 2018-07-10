@@ -69,28 +69,43 @@ public class CommucateService extends Service {
         return iCommucateService;
     }
 
-    public static void notifyLog(LogBean logBean){
+    public synchronized static void notifyNetLog(LogBean logBean){
         int count = 0;
-        RemoteCallbackList<ILogListener> remoteCallbackList;
-        if(!TextUtils.isEmpty(logBean.getLocalLog())){
-            remoteCallbackList=localLogCallbacks;
-        }else if(!TextUtils.isEmpty(logBean.getUrl())){
-            remoteCallbackList=netLogCallbacks;
-        }else{
+        if(TextUtils.isEmpty(logBean.getUrl())){
             return;
         }
-        count = remoteCallbackList.beginBroadcast();
+        count = netLogCallbacks.beginBroadcast();
         if (count == 0) {
-            remoteCallbackList.finishBroadcast();
+            netLogCallbacks.finishBroadcast();
             return;
         }
         try {
             for (int i = 0; i < count; i++) {
-                remoteCallbackList.getBroadcastItem(i).message(logBean);
+                netLogCallbacks.getBroadcastItem(i).message(logBean);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        remoteCallbackList.finishBroadcast();
+        netLogCallbacks.finishBroadcast();
+    }
+
+    public synchronized static void notifyLocalLog(LogBean logBean){
+        int count = 0;
+        if(TextUtils.isEmpty(logBean.getLocalLog())){
+            return;
+        }
+        count = localLogCallbacks.beginBroadcast();
+        if (count == 0) {
+            localLogCallbacks.finishBroadcast();
+            return;
+        }
+        try {
+            for (int i = 0; i < count; i++) {
+                localLogCallbacks.getBroadcastItem(i).message(logBean);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        localLogCallbacks.finishBroadcast();
     }
 }

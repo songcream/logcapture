@@ -81,7 +81,7 @@ public class LocalLogUtil {
                 while (!stop) {
                     line = reader.readLine();
                     logBean.setLocalLog(line);
-                    CommucateService.notifyLog(logBean);
+                    CommucateService.notifyLocalLog(logBean);
 //                    Log.e("log","from other===="+line);      //这里不能调用log，否则会造成死循环
                 }
             } catch (Exception e) {
