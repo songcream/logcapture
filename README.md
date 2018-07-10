@@ -14,7 +14,8 @@ Step 2. 在需要使用抓包的module中加入
 	}
   
 Step 3. 完成上面两个步骤之后，就可以使用logcapture的类了，以下分为两个小步，分别集成网络抓包和本地logcat抓包，根据自己的需要集成
- 1、集成网络抓包
+
+1、集成网络抓包
  需要添加OKHttp的拦截器，代码如下：（目的是在debug模式下才加入改拦	截，在正式包中加入有数据泄露的风险）
  
  	public static OkHttpClient.Builder addLogCaptureInterceptor(OkHttpClient.Builder builder){
